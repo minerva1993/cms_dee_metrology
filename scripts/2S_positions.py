@@ -189,9 +189,66 @@ for f,s in zip(files,side):
 
     full_disk_dfs.append(module.copy())
 
-
 #print(full_disk_dfs)
 
+#Take flatness data
+sorted_files = sorted(files, key=lambda x: 0 if 'top' in x.lower() else 1) # top comes first
+full_disk_flatness_dfs = []
+
+for f in sorted_files:
+    flatness  = pd.read_csv('../'+Dee_name+'/results/'+f.replace('positions', 'flatness'), skiprows=5, encoding='latin')
+    flatness = flatness[flatness["Control"] == "Flatness"]
+    #assume 'Name' be like 12_1...14_1...14_25
+    flatness[["n1", "n2"]] = flatness["Name"].str.split("_", expand=True).astype(int)
+    #sort
+    flatness = flatness.sort_values(["n1", "n2"])
+    flatness = flatness.reset_index(drop=True)
+
+    #if bottom, need to flip indices again
+    if "bottom" in f.lower():
+        groups = []
+        for n1_val, g in flatness.groupby("n1", sort=False):
+            reversed_vals = g["n2"].iloc[::-1].reset_index(drop=True) + 1
+            g = g.copy()
+            g.loc[:, "n2"] = reversed_vals.values.astype(int)
+            groups.append(g)
+        flatness = pd.concat(groups, ignore_index=True)
+        flatness["Name"] = flatness["n1"].astype(str) + "_" + flatness["n2"].astype(str)
+        flatness = flatness.sort_values(["n1", "n2"])
+
+    print(f + '\n', flatness)
+    full_disk_flatness_dfs.append(flatness.copy())
+
+if len(full_disk_flatness_dfs) == 1:
+    full_disk_flatness = full_disk_flatness_dfs[0]
+else:
+    top_df = full_disk_flatness_dfs[0]
+    bottom_df = full_disk_flatness_dfs[1]
+
+    merged_rows = []
+
+    if len(top_df) != len(top_df):
+        print("Top and bottom have different number of planes!!!")
+        sys.exit()
+
+    max_len = len(top_df)
+
+    for i in range(max_len):
+        if i < len(top_df):
+            merged_rows.append(top_df.iloc[i])
+
+        if i < len(bottom_df):
+            merged_rows.append(bottom_df.iloc[i])
+
+    full_disk_flatness = pd.DataFrame(merged_rows)
+    full_disk_flatness = full_disk_flatness.reset_index(drop=True)
+
+#print(full_disk_flatness["Meas"])
+print(full_disk_flatness)
+
+
+
+## concat position dfs and sorting 
 full_disk = pd.concat(full_disk_dfs, ignore_index=True)
 
 #sort by nominal (cad?) values
@@ -231,8 +288,16 @@ full_disk['Angle'] = adjusted_angle
 full_disk = full_disk.sort_values(by=['RingIndex', 'Angle']).reset_index(drop=True)
 full_disk['ModuleNumber'] = full_disk.groupby('RingIndex').cumcount() + 1
 
+#merge flatness
+full_disk = full_disk.merge(
+    full_disk_flatness[["n1", "n2", "Meas"]],
+    left_on=["RingIndex", "ModuleNumber"], 
+    right_on=["n1", "n2"],
+    how="left"
+)
+
 #columns_to_print = ['RingIndex', 'Radius', 'ModuleNumber', 'Angle', 'CenterXn', 'CenterXm', 'CenterXd', 'CenterYn', 'CenterYm', 'CenterYd', 'angle_dev']
-columns_to_print = ['RingIndex', 'ModuleNumber', 'CenterXn', 'CenterXm', 'CenterYn', 'CenterYm', 'CenterXd', 'CenterYd', 'angle_dev']
+columns_to_print = ['RingIndex', 'ModuleNumber', 'CenterXn', 'CenterXm', 'CenterYn', 'CenterYm', 'CenterXd', 'CenterYd', 'angle_dev', 'Meas']
 print(full_disk[columns_to_print].to_string(index=False))
 
 full_disk.to_csv(os.path.join('..', Dee_name, 'plots/2S_positions_sorted.csv'), columns=columns_to_print, index=False)
