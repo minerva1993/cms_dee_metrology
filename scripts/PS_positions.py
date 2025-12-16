@@ -3,7 +3,7 @@ import numpy as np
 import os
 
 #select only one Dee to process
-Dee_name = 'DD12-E-001'
+Dee_name = 'DD12-O-103'
 
 files = ['PSinserts_top.csv','PSinserts_bottom.csv']
 side = ['Top', 'Bottom']
@@ -66,7 +66,8 @@ for f,s in zip(files,side):
     module['i1i3_dist_dev'] = ((module.Y3m-module.Y1m)**2+(module.X3m-module.X1m)**2)**0.5 - 136.67
     module['i2_nofit'] = abs(module.i1i2_dist_dev)>0.2
     module['i3_nofit'] = (module.i1i2_dist_dev**2+(py.tan(module.angle_dev) * 136.67)**2)**0.5  > 0.45
-    module['nofit'] = sum(module.i2_nofit)>0 or sum(module.i3_nofit)>0
+    #module['nofit'] = sum(module.i2_nofit)>0 or sum(module.i3_nofit)>0
+    module['nofit'] = module['i2_nofit'] | module['i3_nofit']
     module['CenterXn'] = (module.X1n+module.X3n)/2
     module['CenterYn'] = (module.Y1n+module.Y3n)/2
     module['i1i3_vect_X'] = (module.X3n-module.X1n)/136.67
@@ -80,7 +81,7 @@ for f,s in zip(files,side):
         print('WARNING: At least one module might not fit to the inserts.')
 
     #print(module.iloc[:,18:])
-    columns_to_print = ['CenterXn', 'CenterXm', 'CenterXd', 'CenterYn', 'CenterYm', 'CenterYd']
+    columns_to_print = ['CenterXn', 'CenterXm', 'CenterXd', 'CenterYn', 'CenterYm', 'CenterYd', 'i2_nofit', 'i3_nofit', 'nofit']
     print(module[columns_to_print].to_string(index=False))
 
 

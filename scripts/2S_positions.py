@@ -4,7 +4,7 @@ import os
 from matplotlib.patches import Arc, RegularPolygon
 
 #select only one Dee to process
-Dee_name = 'DD12-E-001'
+Dee_name = 'DD12-O-103'
 
 files = ['2S_positions_top.csv','2S_positions_bottom.csv']
 side = ['Top', 'Bottom']
@@ -74,43 +74,64 @@ for f,s in zip(files,side):
     py.savefig('../'+Dee_name+'/plots/2S_inserts_'+s+'.png',dpi=600)
     py.savefig('../'+Dee_name+'/plots/2S_inserts_'+s+'.pdf')
 
-    module = pd.DataFrame(index=range(int(len(X_data)/5)))
-    module['X1n'] = pd.array(X_data.Nom[0::5])
-    module['Y1n'] = pd.array(Y_data.Nom[0::5])
-    module['X2n'] = pd.array(X_data.Nom[1::5])
-    module['Y2n'] = pd.array(Y_data.Nom[1::5])
-    module['X3n'] = pd.array(X_data.Nom[2::5])
-    module['Y3n'] = pd.array(Y_data.Nom[2::5])
-    module['X4n'] = pd.array(X_data.Nom[3::5])
-    module['Y4n'] = pd.array(Y_data.Nom[3::5])
-    module['X5n'] = pd.array(X_data.Nom[4::5])
-    module['Y5n'] = pd.array(Y_data.Nom[4::5])
-    module['X1m'] = pd.array(X_data.Meas[0::5])
-    module['Y1m'] = pd.array(Y_data.Meas[0::5])
-    module['X2m'] = pd.array(X_data.Meas[1::5])
-    module['Y2m'] = pd.array(Y_data.Meas[1::5])
-    module['X3m'] = pd.array(X_data.Meas[2::5])
-    module['Y3m'] = pd.array(Y_data.Meas[2::5])
-    module['X4m'] = pd.array(X_data.Meas[3::5])
-    module['Y4m'] = pd.array(Y_data.Meas[3::5])
-    module['X5m'] = pd.array(X_data.Meas[4::5])
-    module['Y5m'] = pd.array(Y_data.Meas[4::5])
-    module['X1d'] = pd.array(X_data.Dev[0::5])
-    module['Y1d'] = pd.array(Y_data.Dev[0::5])
-    module['X2d'] = pd.array(X_data.Dev[1::5])
-    module['Y2d'] = pd.array(Y_data.Dev[1::5])
-    module['X3d'] = pd.array(X_data.Dev[2::5])
-    module['Y3d'] = pd.array(Y_data.Dev[2::5])
-    module['X4d'] = pd.array(X_data.Dev[3::5])
-    module['Y4d'] = pd.array(Y_data.Dev[3::5])
-    module['X5d'] = pd.array(X_data.Dev[4::5])
-    module['Y5d'] = pd.array(Y_data.Dev[4::5])
-    module['CenterXn'] = module.X3n
-    module['CenterYn'] = module.Y3n
-    module['CenterXm'] = module.X3m
-    module['CenterYm'] = module.Y3m
-    module['CenterXd'] = module.X3d
-    module['CenterYd'] = module.Y3d
+    #module = pd.DataFrame(index=range(int(len(X_data)/5)))
+    #module['X1n'] = pd.array(X_data.Nom[0::5])
+    #module['Y1n'] = pd.array(Y_data.Nom[0::5])
+    #module['X2n'] = pd.array(X_data.Nom[1::5])
+    #module['Y2n'] = pd.array(Y_data.Nom[1::5])
+    #module['X3n'] = pd.array(X_data.Nom[2::5])
+    #module['Y3n'] = pd.array(Y_data.Nom[2::5])
+    #module['X4n'] = pd.array(X_data.Nom[3::5])
+    #module['Y4n'] = pd.array(Y_data.Nom[3::5])
+    #module['X5n'] = pd.array(X_data.Nom[4::5])
+    #module['Y5n'] = pd.array(Y_data.Nom[4::5])
+    #module['X1m'] = pd.array(X_data.Meas[0::5])
+    #module['Y1m'] = pd.array(Y_data.Meas[0::5])
+    #module['X2m'] = pd.array(X_data.Meas[1::5])
+    #module['Y2m'] = pd.array(Y_data.Meas[1::5])
+    #module['X3m'] = pd.array(X_data.Meas[2::5])
+    #module['Y3m'] = pd.array(Y_data.Meas[2::5])
+    #module['X4m'] = pd.array(X_data.Meas[3::5])
+    #module['Y4m'] = pd.array(Y_data.Meas[3::5])
+    #module['X5m'] = pd.array(X_data.Meas[4::5])
+    #module['Y5m'] = pd.array(Y_data.Meas[4::5])
+    #module['X1d'] = pd.array(X_data.Dev[0::5])
+    #module['Y1d'] = pd.array(Y_data.Dev[0::5])
+    #module['X2d'] = pd.array(X_data.Dev[1::5])
+    #module['Y2d'] = pd.array(Y_data.Dev[1::5])
+    #module['X3d'] = pd.array(X_data.Dev[2::5])
+    #module['Y3d'] = pd.array(Y_data.Dev[2::5])
+    #module['X4d'] = pd.array(X_data.Dev[3::5])
+    #module['Y4d'] = pd.array(Y_data.Dev[3::5])
+    #module['X5d'] = pd.array(X_data.Dev[4::5])
+    #module['Y5d'] = pd.array(Y_data.Dev[4::5])
+    #module['CenterXn'] = module.X3n
+    #module['CenterYn'] = module.Y3n
+    #module['CenterXm'] = module.X3m
+    #module['CenterYm'] = module.Y3m
+    #module['CenterXd'] = module.X3d
+    #module['CenterYd'] = module.Y3d
+
+    # For 2 points measurement:
+    module = pd.DataFrame(index=range(int(len(X_data)/2)))
+    module['X1n'] = pd.array(X_data.Nom[0::2])
+    module['Y1n'] = pd.array(Y_data.Nom[0::2])
+    module['X2n'] = pd.array(X_data.Nom[1::2])
+    module['Y2n'] = pd.array(Y_data.Nom[1::2])
+    module['X1m'] = pd.array(X_data.Meas[0::2])
+    module['Y1m'] = pd.array(Y_data.Meas[0::2])
+    module['X2m'] = pd.array(X_data.Meas[1::2])
+    module['Y2m'] = pd.array(Y_data.Meas[1::2])
+    module['X1d'] = pd.array(X_data.Dev[0::2])
+    module['Y1d'] = pd.array(Y_data.Dev[0::2])
+    module['X2d'] = pd.array(X_data.Dev[1::2])
+    module['Y2d'] = pd.array(Y_data.Dev[1::2])
+    module['CenterXn'] = module.X1n
+    module['CenterYn'] = module.Y1n
+    module['CenterXm'] = module.X1m
+    module['CenterYm'] = module.Y1m
+    module['CenterXd'] = module.X1d
+    module['CenterYd'] = module.Y1d
 
     #print(module)
     columns_to_print = ['CenterXn', 'CenterXm', 'CenterXd', 'CenterYn', 'CenterYm', 'CenterYd']
@@ -151,11 +172,20 @@ for f,s in zip(files,side):
     for r,m in module.iterrows():
         #nominal vector using 3 and 5
         #should move this out of the loop and make column in module object
-        nom_vect_x = m.X5n - m.X3n
-        nom_vect_y = m.Y5n - m.Y3n
+        #nom_vect_x = m.X5n - m.X3n
+        #nom_vect_y = m.Y5n - m.Y3n
+        #nom_angle = py.degrees(py.arctan2(nom_vect_y, nom_vect_x))
+        #meas_vect_x = m.X5m - m.X3m
+        #meas_vect_y = m.Y5m - m.Y3m
+        #meas_angle = py.degrees(py.arctan2(meas_vect_y, meas_vect_x))
+        #angle_dev = (meas_angle - nom_angle)
+
+        # For 2 points measurement:
+        nom_vect_x = m.X2n - m.X1n
+        nom_vect_y = m.Y2n - m.Y1n
         nom_angle = py.degrees(py.arctan2(nom_vect_y, nom_vect_x))
-        meas_vect_x = m.X5m - m.X3m
-        meas_vect_y = m.Y5m - m.Y3m
+        meas_vect_x = m.X2m - m.X1m
+        meas_vect_y = m.Y2m - m.Y1m
         meas_angle = py.degrees(py.arctan2(meas_vect_y, meas_vect_x))
         angle_dev = (meas_angle - nom_angle)
 
@@ -197,7 +227,8 @@ full_disk_flatness_dfs = []
 
 for f in sorted_files:
     flatness  = pd.read_csv('../'+Dee_name+'/results/'+f.replace('positions', 'flatness'), skiprows=5, encoding='latin')
-    flatness = flatness[flatness["Control"] == "Flatness"]
+    #flatness = flatness[flatness["Control"] == "Flatness"]
+    flatness = flatness[(flatness["Control"] == "Flatness") & (~flatness["Name"].str.contains("ref"))]
     #assume 'Name' be like 12_1...14_1...14_25
     flatness[["n1", "n2"]] = flatness["Name"].str.split("_", expand=True).astype(int)
     #sort
@@ -208,7 +239,12 @@ for f in sorted_files:
     if "bottom" in f.lower():
         groups = []
         for n1_val, g in flatness.groupby("n1", sort=False):
-            reversed_vals = g["n2"].iloc[::-1].reset_index(drop=True) + 1
+
+            #reversed_vals = g["n2"].iloc[::-1].reset_index(drop=True) +1
+
+            # For 2 points measurement ... version of... :
+            reversed_vals = g["n2"]
+
             g = g.copy()
             g.loc[:, "n2"] = reversed_vals.values.astype(int)
             groups.append(g)
@@ -216,7 +252,7 @@ for f in sorted_files:
         flatness["Name"] = flatness["n1"].astype(str) + "_" + flatness["n2"].astype(str)
         flatness = flatness.sort_values(["n1", "n2"])
 
-    print(f + '\n', flatness)
+    print(f.replace('positions', 'flatness') + '\n', flatness)
     full_disk_flatness_dfs.append(flatness.copy())
 
 if len(full_disk_flatness_dfs) == 1:
