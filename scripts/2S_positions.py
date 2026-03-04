@@ -4,12 +4,15 @@ import os
 from matplotlib.patches import Arc, RegularPolygon
 
 #select only one Dee to process
-Dee_name = 'DD12-O-103'
+Dee_name = 'DD12-O-104'
 
 files = ['2S_positions_top.csv','2S_positions_bottom.csv']
 side = ['Top', 'Bottom']
 #files = ['2S_positions_top.csv']
 #side = ['Top']
+
+two_point_2S_measurement = True
+flip_flatness_bottom_indices = False
 
 full_disk_dfs = []
 
@@ -74,64 +77,65 @@ for f,s in zip(files,side):
     py.savefig('../'+Dee_name+'/plots/2S_inserts_'+s+'.png',dpi=600)
     py.savefig('../'+Dee_name+'/plots/2S_inserts_'+s+'.pdf')
 
-    #module = pd.DataFrame(index=range(int(len(X_data)/5)))
-    #module['X1n'] = pd.array(X_data.Nom[0::5])
-    #module['Y1n'] = pd.array(Y_data.Nom[0::5])
-    #module['X2n'] = pd.array(X_data.Nom[1::5])
-    #module['Y2n'] = pd.array(Y_data.Nom[1::5])
-    #module['X3n'] = pd.array(X_data.Nom[2::5])
-    #module['Y3n'] = pd.array(Y_data.Nom[2::5])
-    #module['X4n'] = pd.array(X_data.Nom[3::5])
-    #module['Y4n'] = pd.array(Y_data.Nom[3::5])
-    #module['X5n'] = pd.array(X_data.Nom[4::5])
-    #module['Y5n'] = pd.array(Y_data.Nom[4::5])
-    #module['X1m'] = pd.array(X_data.Meas[0::5])
-    #module['Y1m'] = pd.array(Y_data.Meas[0::5])
-    #module['X2m'] = pd.array(X_data.Meas[1::5])
-    #module['Y2m'] = pd.array(Y_data.Meas[1::5])
-    #module['X3m'] = pd.array(X_data.Meas[2::5])
-    #module['Y3m'] = pd.array(Y_data.Meas[2::5])
-    #module['X4m'] = pd.array(X_data.Meas[3::5])
-    #module['Y4m'] = pd.array(Y_data.Meas[3::5])
-    #module['X5m'] = pd.array(X_data.Meas[4::5])
-    #module['Y5m'] = pd.array(Y_data.Meas[4::5])
-    #module['X1d'] = pd.array(X_data.Dev[0::5])
-    #module['Y1d'] = pd.array(Y_data.Dev[0::5])
-    #module['X2d'] = pd.array(X_data.Dev[1::5])
-    #module['Y2d'] = pd.array(Y_data.Dev[1::5])
-    #module['X3d'] = pd.array(X_data.Dev[2::5])
-    #module['Y3d'] = pd.array(Y_data.Dev[2::5])
-    #module['X4d'] = pd.array(X_data.Dev[3::5])
-    #module['Y4d'] = pd.array(Y_data.Dev[3::5])
-    #module['X5d'] = pd.array(X_data.Dev[4::5])
-    #module['Y5d'] = pd.array(Y_data.Dev[4::5])
-    #module['CenterXn'] = module.X3n
-    #module['CenterYn'] = module.Y3n
-    #module['CenterXm'] = module.X3m
-    #module['CenterYm'] = module.Y3m
-    #module['CenterXd'] = module.X3d
-    #module['CenterYd'] = module.Y3d
-
-    # For 2 points measurement:
-    module = pd.DataFrame(index=range(int(len(X_data)/2)))
-    module['X1n'] = pd.array(X_data.Nom[0::2])
-    module['Y1n'] = pd.array(Y_data.Nom[0::2])
-    module['X2n'] = pd.array(X_data.Nom[1::2])
-    module['Y2n'] = pd.array(Y_data.Nom[1::2])
-    module['X1m'] = pd.array(X_data.Meas[0::2])
-    module['Y1m'] = pd.array(Y_data.Meas[0::2])
-    module['X2m'] = pd.array(X_data.Meas[1::2])
-    module['Y2m'] = pd.array(Y_data.Meas[1::2])
-    module['X1d'] = pd.array(X_data.Dev[0::2])
-    module['Y1d'] = pd.array(Y_data.Dev[0::2])
-    module['X2d'] = pd.array(X_data.Dev[1::2])
-    module['Y2d'] = pd.array(Y_data.Dev[1::2])
-    module['CenterXn'] = module.X1n
-    module['CenterYn'] = module.Y1n
-    module['CenterXm'] = module.X1m
-    module['CenterYm'] = module.Y1m
-    module['CenterXd'] = module.X1d
-    module['CenterYd'] = module.Y1d
+    if not two_point_2S_measurement:
+        module = pd.DataFrame(index=range(int(len(X_data)/5)))
+        module['X1n'] = pd.array(X_data.Nom[0::5])
+        module['Y1n'] = pd.array(Y_data.Nom[0::5])
+        module['X2n'] = pd.array(X_data.Nom[1::5])
+        module['Y2n'] = pd.array(Y_data.Nom[1::5])
+        module['X3n'] = pd.array(X_data.Nom[2::5])
+        module['Y3n'] = pd.array(Y_data.Nom[2::5])
+        module['X4n'] = pd.array(X_data.Nom[3::5])
+        module['Y4n'] = pd.array(Y_data.Nom[3::5])
+        module['X5n'] = pd.array(X_data.Nom[4::5])
+        module['Y5n'] = pd.array(Y_data.Nom[4::5])
+        module['X1m'] = pd.array(X_data.Meas[0::5])
+        module['Y1m'] = pd.array(Y_data.Meas[0::5])
+        module['X2m'] = pd.array(X_data.Meas[1::5])
+        module['Y2m'] = pd.array(Y_data.Meas[1::5])
+        module['X3m'] = pd.array(X_data.Meas[2::5])
+        module['Y3m'] = pd.array(Y_data.Meas[2::5])
+        module['X4m'] = pd.array(X_data.Meas[3::5])
+        module['Y4m'] = pd.array(Y_data.Meas[3::5])
+        module['X5m'] = pd.array(X_data.Meas[4::5])
+        module['Y5m'] = pd.array(Y_data.Meas[4::5])
+        module['X1d'] = pd.array(X_data.Dev[0::5])
+        module['Y1d'] = pd.array(Y_data.Dev[0::5])
+        module['X2d'] = pd.array(X_data.Dev[1::5])
+        module['Y2d'] = pd.array(Y_data.Dev[1::5])
+        module['X3d'] = pd.array(X_data.Dev[2::5])
+        module['Y3d'] = pd.array(Y_data.Dev[2::5])
+        module['X4d'] = pd.array(X_data.Dev[3::5])
+        module['Y4d'] = pd.array(Y_data.Dev[3::5])
+        module['X5d'] = pd.array(X_data.Dev[4::5])
+        module['Y5d'] = pd.array(Y_data.Dev[4::5])
+        module['CenterXn'] = module.X3n
+        module['CenterYn'] = module.Y3n
+        module['CenterXm'] = module.X3m
+        module['CenterYm'] = module.Y3m
+        module['CenterXd'] = module.X3d
+        module['CenterYd'] = module.Y3d
+    else:
+        # For 2 points measurement:
+        module = pd.DataFrame(index=range(int(len(X_data)/2)))
+        module['X1n'] = pd.array(X_data.Nom[0::2])
+        module['Y1n'] = pd.array(Y_data.Nom[0::2])
+        module['X2n'] = pd.array(X_data.Nom[1::2])
+        module['Y2n'] = pd.array(Y_data.Nom[1::2])
+        module['X1m'] = pd.array(X_data.Meas[0::2])
+        module['Y1m'] = pd.array(Y_data.Meas[0::2])
+        module['X2m'] = pd.array(X_data.Meas[1::2])
+        module['Y2m'] = pd.array(Y_data.Meas[1::2])
+        module['X1d'] = pd.array(X_data.Dev[0::2])
+        module['Y1d'] = pd.array(Y_data.Dev[0::2])
+        module['X2d'] = pd.array(X_data.Dev[1::2])
+        module['Y2d'] = pd.array(Y_data.Dev[1::2])
+        module['CenterXn'] = module.X1n
+        module['CenterYn'] = module.Y1n
+        module['CenterXm'] = module.X1m
+        module['CenterYm'] = module.Y1m
+        module['CenterXd'] = module.X1d
+        module['CenterYd'] = module.Y1d
 
     #print(module)
     columns_to_print = ['CenterXn', 'CenterXm', 'CenterXd', 'CenterYn', 'CenterYm', 'CenterYd']
@@ -170,24 +174,26 @@ for f,s in zip(files,side):
     angle_devs = []
 
     for r,m in module.iterrows():
-        #nominal vector using 3 and 5
-        #should move this out of the loop and make column in module object
-        #nom_vect_x = m.X5n - m.X3n
-        #nom_vect_y = m.Y5n - m.Y3n
-        #nom_angle = py.degrees(py.arctan2(nom_vect_y, nom_vect_x))
-        #meas_vect_x = m.X5m - m.X3m
-        #meas_vect_y = m.Y5m - m.Y3m
-        #meas_angle = py.degrees(py.arctan2(meas_vect_y, meas_vect_x))
-        #angle_dev = (meas_angle - nom_angle)
+        if not two_point_2S_measurement:
+            #nominal vector using 3 and 5
+            #should move this out of the loop and make column in module object
+            nom_vect_x = m.X5n - m.X3n
+            nom_vect_y = m.Y5n - m.Y3n
+            nom_angle = py.degrees(py.arctan2(nom_vect_y, nom_vect_x))
+            meas_vect_x = m.X5m - m.X3m
+            meas_vect_y = m.Y5m - m.Y3m
+            meas_angle = py.degrees(py.arctan2(meas_vect_y, meas_vect_x))
+            angle_dev = (meas_angle - nom_angle)
 
-        # For 2 points measurement:
-        nom_vect_x = m.X2n - m.X1n
-        nom_vect_y = m.Y2n - m.Y1n
-        nom_angle = py.degrees(py.arctan2(nom_vect_y, nom_vect_x))
-        meas_vect_x = m.X2m - m.X1m
-        meas_vect_y = m.Y2m - m.Y1m
-        meas_angle = py.degrees(py.arctan2(meas_vect_y, meas_vect_x))
-        angle_dev = (meas_angle - nom_angle)
+        else:
+            # For 2 points measurement:
+            nom_vect_x = m.X2n - m.X1n
+            nom_vect_y = m.Y2n - m.Y1n
+            nom_angle = py.degrees(py.arctan2(nom_vect_y, nom_vect_x))
+            meas_vect_x = m.X2m - m.X1m
+            meas_vect_y = m.Y2m - m.Y1m
+            meas_angle = py.degrees(py.arctan2(meas_vect_y, meas_vect_x))
+            angle_dev = (meas_angle - nom_angle)
 
         angle_devs.append(angle_dev)
 
@@ -235,22 +241,23 @@ for f in sorted_files:
     flatness = flatness.sort_values(["n1", "n2"])
     flatness = flatness.reset_index(drop=True)
 
-    #if bottom, need to flip indices again
-    if "bottom" in f.lower():
-        groups = []
-        for n1_val, g in flatness.groupby("n1", sort=False):
+    if flip_flatness_bottom_indices:
+        #if bottom, need to flip indices again
+        if "bottom" in f.lower():
+            groups = []
+            for n1_val, g in flatness.groupby("n1", sort=False):
 
-            #reversed_vals = g["n2"].iloc[::-1].reset_index(drop=True) +1
+                reversed_vals = g["n2"].iloc[::-1].reset_index(drop=True) +1
 
-            # For 2 points measurement ... version of... :
-            reversed_vals = g["n2"]
+                # For 2 points measurement ... version of... :
+                #reversed_vals = g["n2"]
 
-            g = g.copy()
-            g.loc[:, "n2"] = reversed_vals.values.astype(int)
-            groups.append(g)
-        flatness = pd.concat(groups, ignore_index=True)
-        flatness["Name"] = flatness["n1"].astype(str) + "_" + flatness["n2"].astype(str)
-        flatness = flatness.sort_values(["n1", "n2"])
+                g = g.copy()
+                g.loc[:, "n2"] = reversed_vals.values.astype(int)
+                groups.append(g)
+            flatness = pd.concat(groups, ignore_index=True)
+            flatness["Name"] = flatness["n1"].astype(str) + "_" + flatness["n2"].astype(str)
+            flatness = flatness.sort_values(["n1", "n2"])
 
     print(f.replace('positions', 'flatness') + '\n', flatness)
     full_disk_flatness_dfs.append(flatness.copy())
@@ -339,3 +346,63 @@ print(full_disk[columns_to_print].to_string(index=False))
 full_disk.to_csv(os.path.join('..', Dee_name, 'plots/2S_positions_sorted.csv'), columns=columns_to_print, index=False)
 
 #py.show()
+
+#2S flatness histogram
+import matplotlib.pyplot as plt
+
+full_disk_top = full_disk[full_disk["ModuleNumber"] % 2 == 1]
+full_disk_bottom = full_disk[full_disk["ModuleNumber"] % 2 == 0]
+
+max_range = 0.3
+meas_overflow_all = full_disk["Meas"].clip(upper=max_range)
+meas_overflow_top = full_disk_top["Meas"].clip(upper=max_range)
+meas_overflow_bottom = full_disk_bottom["Meas"].clip(upper=max_range)
+
+# define bins
+bins = np.linspace(0, max_range, 21)
+
+def draw_flatness_hist(meas_overflow, side):
+    plt.figure()
+    plt.hist(meas_overflow, bins=bins, range=(0, max_range))
+    plt.xlabel("flatness (mm)")
+    plt.ylabel("Entries")
+    plt.title("2S flatness of "+ Dee_name + ' ' + side)
+
+    mean = meas_overflow.mean()
+    std = meas_overflow.std()
+    text = (
+        f"Mean = {mean:.3f}\n"
+        f"Std = {std:.3f}\n"
+        f"N = {len(meas_overflow)}"
+    )
+    plt.text(
+        0.97, 0.95, text,
+        transform=plt.gca().transAxes,
+        ha="right", va="top",
+        bbox=dict(boxstyle="round", facecolor="none", edgecolor="black")
+    )
+    plt.savefig('../'+Dee_name+'/plots/2S_flatness_' + Dee_name + '_' + side + '.png', dpi=600, bbox_inches='tight')
+    plt.savefig('../'+Dee_name+'/plots/2S_flatness_' + Dee_name + '_' + side + '.pdf', bbox_inches='tight')
+    plt.close()
+
+draw_flatness_hist(meas_overflow_all, 'All')
+draw_flatness_hist(meas_overflow_top, 'Top')
+draw_flatness_hist(meas_overflow_bottom, 'Bottom')
+
+#plt.figure()
+#plt.hist(meas_overflow_top, bins=bins, range=(0, max_range))
+#plt.xlabel("flatness (mm)")
+#plt.ylabel("Entries")
+#plt.title("2S flatness of "+ Dee_name + " Top")
+#plt.savefig('../'+Dee_name+'/plots/2S_flatness_' + Dee_name + '_Top.png', dpi=600, bbox_inches='tight')
+#plt.savefig('../'+Dee_name+'/plots/2S_flatness_' + Dee_name + '_Top.pdf', bbox_inches='tight')
+#plt.close()
+#
+#plt.figure()
+#plt.hist(meas_overflow_bottom, bins=bins, range=(0, max_range))
+#plt.xlabel("flatness (mm)")
+#plt.ylabel("Entries")
+#plt.title("2S flatness of "+ Dee_name + " Bottom")
+#plt.savefig('../'+Dee_name+'/plots/2S_flatness_' + Dee_name + '_Bottom.png', dpi=600, bbox_inches='tight')
+#plt.savefig('../'+Dee_name+'/plots/2S_flatness_' + Dee_name + '_Bottom.pdf', bbox_inches='tight')
+#plt.close()

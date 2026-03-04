@@ -3,7 +3,7 @@ import numpy as np
 import os
 
 #select only one Dee to process
-Dee_name = 'DD12-O-103'
+Dee_name = 'DD12-O-104'
 
 files = ['PSinserts_top.csv','PSinserts_bottom.csv']
 side = ['Top', 'Bottom']
